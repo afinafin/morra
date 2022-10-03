@@ -14,6 +14,11 @@ exports.GetHand = class extends React.Component {
         <br />
         {!playable ? 'Please wait...' : ''}
         <br />
+        <h3>Select Your Number</h3>
+        <button
+          disabled={!playable}
+          onClick={() => parent.playHand('ZERO')}
+        >Zero</button>
         <button
           disabled={!playable}
           onClick={() => parent.playHand('ONE')}
@@ -22,10 +27,6 @@ exports.GetHand = class extends React.Component {
           disabled={!playable}
           onClick={() => parent.playHand('TWO')}
         >Two</button>
-        <button
-          disabled={!playable}
-          onClick={() => parent.playHand('THREE')}
-        >Three</button>
       </div>
     );
   }
@@ -36,10 +37,15 @@ exports.GetGuess = class extends React.Component {
     const {parent, playable, guess} = this.props;
     return (
       <div>
-        {hand ? 'It was a miss! Guess again.' : ''}
+        {guess ? 'It was a miss! Guess again.' : ''}
         <br />
         {!playable ? 'Please wait...' : ''}
         <br />
+        <h3>Select Your Guess</h3>
+        <button
+          disabled={!playable}
+          onClick={() => parent.guessHand('ZERO')}
+        >Zero</button>
         <button
           disabled={!playable}
           onClick={() => parent.guessHand('ONE')}
@@ -56,14 +62,6 @@ exports.GetGuess = class extends React.Component {
           disabled={!playable}
           onClick={() => parent.guessHand('FOUR')}
         >Four</button>
-        <button
-          disabled={!playable}
-          onClick={() => parent.guessHand('FIVE')}
-        >Five</button>
-        <button
-          disabled={!playable}
-          onClick={() => parent.guessHand('SIX')}
-        >Six</button>
         </div>
     );
   }
@@ -74,6 +72,18 @@ exports.WaitingForResults = class extends React.Component {
     return (
       <div>
         Waiting for results...
+      </div>
+    );
+  }
+}
+
+exports.Final = class extends React.Component {
+  render() {
+    const {result} = this.props;
+    return (
+      <div>
+        The total of both(Alice and Bob) number: 
+        <br /> {result}
       </div>
     );
   }
