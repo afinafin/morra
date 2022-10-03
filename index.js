@@ -16,7 +16,7 @@ const handToInt = {'ONE': 0, 'TWO': 1, 'THREE': 2};
 const guessToInt = {'ONE': 0, 'TWO': 1, 'THREE': 2, 'FOUR': 3, 'FIVE': 4};
 const intToOutcome = ['Bob wins!', 'Draw!', 'Alice wins!'];
 const {standardUnit} = reach;
-const defaults = {defaultFundAmt: '10', defaultWager: '3', standardUnit};
+const defaults = {defaultFundAmt: '10', defaultWager: '1', standardUnit};
 
 class App extends React.Component {
     constructor(props) {
@@ -50,14 +50,14 @@ class Player extends React.Component {
       const hand = await new Promise(resolveHandP => {
         this.setState({view: 'GetHand', playable: true, resolveHandP});
       });
-      //this.setState({view: 'WaitingForResults', hand});
+      this.setState({view: 'WaitingForResults', hand});
       return handToInt[hand];
     }
     async getGuess(what) { //Fun([UInt], UInt)
         const guess = await new Promise(resolveGuessP => {
             this.setState({view: 'YourGuess', playable : true, resolveGuessP})
         });
-        this.setState({view: 'WaitingForResults', hand});
+        this.setState({view: 'WaitingForResults', guess});
         return guessToInt[guess];
 
     }
