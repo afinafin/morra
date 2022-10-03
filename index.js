@@ -12,8 +12,8 @@ import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib';
 reach.setWalletFallback(reach.walletFallback({
   providerEnv: 'TestNet', MyAlgoConnect }));
 
-const handToInt = {'ONE': 0, 'TWO': 1, 'THREE': 2};
-const guessToInt = {'ONE': 0, 'TWO': 1, 'THREE': 2, 'FOUR': 3, 'FIVE': 4, 'SIX': 5};
+const handToInt = {'ZERO': 0, 'ONE': 1, 'TWO': 2};
+const guessToInt = {'ZERO': 0, 'ONE': 1, 'TWO': 2, 'THREE': 3, 'FOUR': 4};
 const intToOutcome = ['Bob wins!', 'Draw!', 'Alice wins!'];
 const {standardUnit} = reach;
 const defaults = {defaultFundAmt: '10', defaultWager: '1', standardUnit};
@@ -61,6 +61,7 @@ class Player extends React.Component {
         return guessToInt[guess];
 
     }
+    actualResult(j) {this.setState({view: 'Final', result: j});}
     seeOutcome(i) { this.setState({view: 'Done', outcome: intToOutcome[i]}); }
     informTimeout() { this.setState({view: 'Timeout'}); }
     playHand(hand) { this.state.resolveHandP(hand); }
@@ -108,6 +109,3 @@ render() { return renderView(this, AttacherViews); }
 }
 
 renderDOM(<App />);
-
-
-
