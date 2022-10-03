@@ -55,7 +55,7 @@ class Player extends React.Component {
     }
     async getGuess(what) { //Fun([UInt], UInt)
         const guess = await new Promise(resolveGuessP => {
-            this.setState({view: 'YourGuess', playable : true, resolveGuessP})
+            this.setState({view: 'GetGuess', playable : true, resolveGuessP})
         });
         this.setState({view: 'WaitingForResults', guess});
         return guessToInt[guess];
