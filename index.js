@@ -14,7 +14,7 @@ reach.setWalletFallback(reach.walletFallback({
 
 const handToInt = {'ZERO': 0, 'ONE': 1, 'TWO': 2};
 const guessToInt = {'ZERO': 0, 'ONE': 1, 'TWO': 2, 'THREE': 3, 'FOUR': 4};
-const intToOutcome = ['Bob wins!', 'Draw!', 'Alice wins!'];
+const intToOutcome = ['Alice wins!', 'Bob Wins!', 'Draw!'];
 const {standardUnit} = reach;
 const defaults = {defaultFundAmt: '10', defaultWager: '1', standardUnit};
 
@@ -52,6 +52,7 @@ class Player extends React.Component {
       });
       this.setState({view: 'WaitingForResults', hand});
       return handToInt[hand];
+      // return hand;
     }
     async getGuess(what) { //Fun([UInt], UInt)
         const guess = await new Promise(resolveGuessP => {
@@ -59,9 +60,10 @@ class Player extends React.Component {
         });
         this.setState({view: 'WaitingForResults', guess});
         return guessToInt[guess];
+        // return guess;
 
     }
-    actualResult(j) {this.setState({view: 'Final', result: j});}
+    actualResult(j) {this.setState({view: 'Final', result: guessToInt[j]});}
     seeOutcome(i) { this.setState({view: 'Done', outcome: intToOutcome[i]}); }
     informTimeout() { this.setState({view: 'Timeout'}); }
     playHand(hand) { this.state.resolveHandP(hand); }
