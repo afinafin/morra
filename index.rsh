@@ -28,23 +28,23 @@ assert(winner(2, 0, 2, 0) == A_WINS);
 assert(winner(0, 1, 0, 2) == DRAW);
 assert(winner(1, 1, 1, 1) == DRAW);
 
-forall(UInt,a =>
-  forall(UInt, b =>
-    forall(UInt, c =>
-      forall(UInt, d =>
-        assert(gameOutcome(winner(a, b, c, d)))))));
+forall(UInt, playHandA =>
+  forall(UInt, playHandB =>
+    forall(UInt, gHandA =>
+      forall(UInt, gHandB =>
+        assert(gameOutcome(winner(playHandA, playHandB, gHandA, gHandB)))))));
 
-forall(UInt, a =>
-  forall(UInt, b =>
-    forall(UInt, c =>
-      assert(winner(a, b ,c, c) == DRAW ))));
+forall(UInt, playHandA =>
+  forall(UInt, playHandB =>
+    forall(UInt, same =>
+      assert(winner(playHandA, playHandB , same, same) == DRAW ))));
 
 const Shared = {
   ...hasRandom,
   getHand: Fun([], UInt),
   getGuess: Fun([UInt], UInt),
-  seeOutcome: Fun([UInt], Null),
   actualResult: Fun([UInt], Null),
+  seeOutcome: Fun([UInt], Null),
   informTimeout: Fun([], Null),
 };
 
@@ -82,7 +82,7 @@ export const main = Reach.App(() => {
     .timeout(relativeTime(time), () => closeTo(Alice, informTimeout));
 
   var outcome = DRAW;
-  invariant(balance() == 2*amt && gameOutcome(outcome));
+  invariant(balance() == 2 * amt && gameOutcome(outcome));
   while(outcome == DRAW){
     commit();
 
@@ -130,22 +130,27 @@ export const main = Reach.App(() => {
     Alice.publish(saltGuessA, gHandA)
       .timeout(relativeTime(time), () => closeTo(Bob, informTimeout));
     checkCommitment(commitGuessA, saltGuessA, gHandA);
-    commit();
 
-    Alice.only(() => {
-      const totalResult = playHandA+playHandB;
+    const totalResult = playHandA+playHandB;
+
+    each([Alice, Bob], () => {
       interact.actualResult(totalResult);
     });
 
-    Alice.publish(totalResult)
-      .timeout(relativeTime(time), () => closeTo(Alice, informTimeout));
+    // Alice.only(() => {
+    //   const totalResult = playHandA+playHandB;
+    //   interact.actualResult(totalResult);
+    // });
+
+    // Alice.publish(totalResult)
+    //   .timeout(relativeTime(time), () => closeTo(Alice, informTimeout));
 
     outcome = winner(playHandA, playHandB, gHandA, gHandB);
     continue;
   } //end loop
 
   assert(outcome == A_WINS || outcome == B_WINS);
-  transfer(2*amt).to(outcome == A_WINS ? Alice : Bob);
+  transfer(2 * amt).to(outcome == A_WINS ? Alice : Bob);
   commit();
 
   each([Alice,Bob], () => {
